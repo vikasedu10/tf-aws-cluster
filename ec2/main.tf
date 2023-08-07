@@ -37,10 +37,6 @@ resource "aws_instance" "bastion" {
   tags = var.resource_tags
 
   user_data = file("${path.module}/scripts/init.sh")
-  # user_data = <<-EOT
-  #               #!/bin/bash
-  #               sudo apt update
-  #             EOT
 }
 
 resource "local_file" "private_key" {
