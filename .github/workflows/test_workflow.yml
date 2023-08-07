@@ -1,13 +1,19 @@
-name: Sample Workflow
+name: EKS Cluster setup
 
 on:
   push:
     branches:
-      - eks-cluster # Trigger this workflow on push to the main branch
+      - eks-cluster # Trigger this workflow on push to the specified branch
   workflow_dispatch:
+
+env:
+  AWS_REGION: ap-south-1 # Update to your desired AWS region
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
 jobs:
-  test:
-    runs-on: self-hosted # Use your self-hosted runner
+  deploy_infrastructure:
+    runs-on: self-hosted
 
     steps:
     - name: Check out code
@@ -15,3 +21,63 @@ jobs:
 
     - name: Print Hello, World!
       run: echo "Hello, World!"
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Terraform fmt
+      id: fmt
+      run: terraform fmt -check
+      continue-on-error: true
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Plan
+      run: terraform plan -out=tfplan
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve tfplan
+
+    # - uses: actions/github-script@v6
+    #   if: github.event_name == 'pull_request'
+    #   env:
+    #     PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+    #   with:
+    #     github-token: ${{ secrets.GITHUB_TOKEN }}
+    #     script: |
+    #       const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+    #       #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+    #       #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+    #       <details><summary>Validation Output</summary>
+    
+    #       \`\`\`\n
+    #       ${{ steps.validate.outputs.stdout }}
+    #       \`\`\`
+    
+    #       </details>
+    
+    #       #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+    
+    #       <details><summary>Show Plan</summary>
+    
+    #       \`\`\`\n
+    #       ${process.env.PLAN}
+    #       \`\`\`
+    
+    #       </details>
+    
+    #       *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+    
+    #       github.rest.issues.createComment({
+    #         issue_number: context.issue.number,
+    #         owner: context.repo.owner,
+    #         repo: context.repo.repo,
+    #         body: output
+    #       })
