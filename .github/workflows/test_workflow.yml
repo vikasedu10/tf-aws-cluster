@@ -1,0 +1,17 @@
+name: Sample Workflow
+
+on:
+  push:
+    branches:
+      - main # Trigger this workflow on push to the main branch
+
+jobs:
+  test:
+    runs-on: self-hosted # Use your self-hosted runner
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Print Hello, World!
+      run: echo "Hello, World!"
