@@ -46,8 +46,8 @@ jobs:
     # - name: Terraform Apply
     #   run: terraform apply -auto-approve tfplan
 
-    - name: Terraform Destroy
-      run: terraform destroy -auto-approve tfplan
+    # - name: Terraform Destroy
+    #   run: terraform destroy -auto-approve tfplan
 
   Test_Applications:
     needs: Setup_Infrastructure
