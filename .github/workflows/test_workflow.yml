@@ -29,10 +29,10 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
 
-    - name: Terraform fmt
-      id: fmt
-      run: terraform fmt -check
-      continue-on-error: true
+    # - name: Terraform fmt
+    #   id: fmt
+    #   run: terraform fmt -check
+    #   continue-on-error: true
 
     - name: Terraform Init
       run: terraform init
@@ -78,9 +78,11 @@ jobs:
 
     steps:
     - name: Install dependencies to deploy charts
+      env:
+        SUDO_PASSWORD: ${{ secrets.BASTION_SUDO_PASSWORD }}
       run: |
         echo "Installing Docker"
-        sudo apt update
+        echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S apt update
         sudo apt install docker.io -y
         sudo usermod -a -G docker $USER
         sudo systemctl start docker
