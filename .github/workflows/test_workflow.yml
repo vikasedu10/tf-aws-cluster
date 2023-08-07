@@ -79,10 +79,10 @@ jobs:
     steps:
     - name: Install dependencies to deploy charts
       env:
-        SUDO_PASSWORD: ${{ secrets.BASTION_SUDO_PASSWORD }}
+        BASTION_SUDO_PASSWORD: ${{ secrets.BASTION_SUDO_PASSWORD }}
       run: |
         echo "Installing Docker"
-        echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S apt update
+        echo "${{ secrets.BASTION_SUDO_PASSWORD }}" | sudo -S apt update
         sudo apt install docker.io -y
         sudo usermod -a -G docker $USER
         sudo systemctl start docker
