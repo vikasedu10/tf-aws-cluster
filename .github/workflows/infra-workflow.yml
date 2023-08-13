@@ -37,7 +37,7 @@ jobs:
       
     - name: Check if prod env
       run: |
-        echo "Checking variable value: ${{ variables.SAMPLE_VAR }}"
+        echo "Checking variable value: ${{ env.SAMPLE_VAR }}"
         sleep 2
         echo "Testing completed."
     # - name: Terraform Apply
