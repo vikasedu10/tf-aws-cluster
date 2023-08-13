@@ -1,0 +1,9 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: github-runner-deploy
+spec:
+  replicas: 1
+  template:
+    spec:
+      repository: vikasedu10/platformui

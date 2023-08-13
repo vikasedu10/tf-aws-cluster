@@ -67,7 +67,7 @@ jobs:
       run: |
         echo "Executing ansible playbooks in progress..."
         sleep 2
-      echo "Servers configured successfully!"
+        echo "Servers configured successfully!"
 
   Deploy_Charts:
     needs: Install_Dependencies
