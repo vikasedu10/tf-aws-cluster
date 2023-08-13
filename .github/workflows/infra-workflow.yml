@@ -26,11 +26,6 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
 
-    # - name: Terraform fmt
-    #   id: fmt
-    #   run: terraform fmt -check
-    #   continue-on-error: true
-
     - name: Terraform Init
       run: terraform init
 
@@ -39,7 +34,12 @@ jobs:
 
     - name: Terraform Plan
       run: terraform plan -out=tfplan
-
+      
+    - name: Check if prod env
+      run: |
+        echo "Checking variable value: ${SAMPLE_VAR}"
+        sleep 2
+        echo "Testing completed."
     # - name: Terraform Apply
     #   run: terraform apply -auto-approve tfplan
 
