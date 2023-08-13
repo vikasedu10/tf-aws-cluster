@@ -32,12 +32,12 @@ jobs:
     - name: Terraform Validate
       run: terraform validate
 
-    - name: Terraform Plan
-      run: terraform plan -out=tfplan
+    # - name: Terraform Plan
+    #   run: terraform plan -out=tfplan
       
     - name: Check if prod env
       run: |
-        echo "Checking variable value: ${SAMPLE_VAR}"
+        echo "Checking variable value: ${{ variables.SAMPLE_VAR }}"
         sleep 2
         echo "Testing completed."
     # - name: Terraform Apply
