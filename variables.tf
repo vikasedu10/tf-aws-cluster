@@ -11,7 +11,9 @@ provider "aws" {
   region                   = var.region
   shared_credentials_files = ["~/.aws/credentials"]
 }
-
+variable "cluster_version" {
+  default = "1.27"
+}
 variable "owner_tag" {
   default = "vikasedu10"
 }
@@ -40,7 +42,7 @@ variable "public_subnets_cidr" {
 
 
 variable "instance_type" {
-  default = "t3.medium"
+  default = "t3.small"
 }
 variable "min_node_count" {
   default = "1"

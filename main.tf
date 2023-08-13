@@ -40,22 +40,17 @@ module "vpc" {
     }
   )
 }
-provider "kubernetes" {
-  host                   = data.aws_eks_cluster.cluster.endpoint
-  token                  = data.aws_eks_cluster_auth.cluster.token
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
-}
 
 module "platform_eks" {
   source = "terraform-aws-modules/eks/aws"
 
   cluster_name    = local.cluster_name
-  cluster_version = "1.27"
+  cluster_version = var.cluster_version
 
   cluster_endpoint_public_access = true
   cluster_addons = {
     aws-ebs-csi-driver = {
-      most_recent = true
+      most_recent = true,
     }
   }
 
@@ -79,8 +74,14 @@ module "platform_eks" {
 
 }
 data "aws_eks_cluster" "cluster" {
-  name = local.cluster_name
+  name = module.platform_eks.cluster_id
 }
 data "aws_eks_cluster_auth" "cluster" {
-  name = local.cluster_name
+  name = module.platform_eks.cluster_id
+}
+
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.cluster.endpoint
+  token                  = data.aws_eks_cluster_auth.cluster.token
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
 }
